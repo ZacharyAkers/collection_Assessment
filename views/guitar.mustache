@@ -1,0 +1,29 @@
+<form action="/guitar" method="post">
+      <h3>Maker</h3>
+      <label>Guitar Brands</label><input type="text" name="brand" value="" placeholder="Enter Brand">
+      <h3>Details</h3>
+      <label>Guitar Type</label><input type="text" name="type" value="" placeholder="Enter Type"><br>
+      <label>Number of Strings</label><input type="text" name="numOfStrings" value="" placeholder="Enter amount of strings"><br>
+      <label>Guitar Price</label><input type="text" name="price" value="" placeholder="Price of the guitar"><br>
+      <h3>Additional Details</h3>
+      <label>Guitar Color</label><input type="text" name="color" value="" placeholder="Enter color"><br>
+      <button type="submit" name="button">Submit Guitar</button>
+</form>
+
+{{#collections}}
+<div class="column">
+<hr>
+<ul>
+  <li>Guitar Brand: {{brand}}</li>
+  <li>Guitar Type: {{type}}</li>
+  <li>Number of Strings: {{numOfStrings}}</li>
+  <li>Guitar Price: {{price}}</li>
+  <li>Guitar Color: {{color}}</li>
+</ul>
+<form action="/{{_id}}/delete" method="post">
+  <button type="submit">Delete</button>
+</form>
+<p><a href="/{{_id}}/edit">Edit</a></p>
+<hr>
+</div>
+{{/collections}}
