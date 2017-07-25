@@ -1,12 +1,12 @@
 <form action="/edit" method="post">
-  {{#collections}}
-  <input type="text" name="brand" value="{{brand}}">
-  <input type="text" name="color" value="{{color}}">
-  {{#details}}
-  <input type="text" name="type" value="{{type}}">
-  <input type="text" name="numOfStrings" value="{{numOfStrings}}">
-  <input type="text" name="price" value="{{price}}">
-  {{/details}}
+  {{#allCards}}
+  <input type="text" name="name" value="{{name}}">
+  <input type="text" name="skill" value="{{skill}}">
+  <input type="text" name="hp" value="{{hp}}">
+  {{#type}}
+  <input type="text" name="elementDamage" value="{{elementDamage}}">
+  <input type="text" name="weakness" value="{{weakness}}">
+  {{/type}}
   <button type="submit" name="button" value="{{_id}}">Submit</button>
-  {{/collections}}
+  {{/allCards}}
 </form>

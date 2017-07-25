@@ -3,54 +3,54 @@ const router = express.Router();
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
+mongoose.Promise = require('bluebird');
+mongoose.connect("mongodb://localhost:27017/pokemonCards");
 
-mongoose.Promise = require("bluebird");
-mongoose.connect("mongodb://localhost:27017/bicyclePlus");
-
-const collectionSchema = new Schema({
-  brand: {type:String, required:true,},
-  details: [{
-      type: {type:String},
-      numberStrings: {type: Number},
-      price: {type: Number},
+const pokemonCardSchema = new Schema ({
+  name: String,
+  type: [{
+    elementDamage: String,
+    weakness: String
   }],
-  color: {type: String} 
+  skill: [String],
+  hp: String
+
 });
 
-const Collection = mongoose.model("Collection", collectionSchema);
+
+
+const cards = mongoose.model('cards', pokemonCardSchema);
 
 router.get('/', function(req, res){
-  Collection.find({}).then(function(collections){
-    res.render("guitar", {collections: collections})
+  cards.find({}).then(function(allCards){
+    res.render("index", {allCards: allCards})
   })
+
 })
 
-router.post("/guitar",function (req,res) {
-  let newCollection = new Collection({
-    brand:req.body.brand,
-    color:req.body.color
+router.post('/', function(req, res){
+  let card = new cards({
+    name: req.body.name,
+    skill: req.body.skill,
+    hp: req.body.hp
   });
-    newCollection.details.push ({
-        type:req.body.type,
-        numberStrings:req.body.numOfStrings,
-        price:req.body.price
-    });
-    console.log(newCollection.toObject());
-    newCollection.save().then(function(guitar){
-        console.log(guitar);
-        res.redirect('/');
-    });
+  card.type.push({elementDamage: req.body.elementDamage, weakness: req.body.weakness});
+  console.log(card.toObject());
+  card.save().then(function(newCard){
+    res.redirect("/")
+  });
 });
 
-router.post("/:newCollectionId/delete", function(req, res) {
-    Collection.deleteOne({_id: req.params.newCollectionId}).then(function(newCollection){
+router.post("/:cardId/delete", function(req, res) {
+    cards.deleteOne({_id: req.params.cardId}).then(function(card){
       res.redirect("/");
     })
+
 });
 
-router.get("/:newCollectionId/edit", function(req, res){
-  Collection.findOne({_id: req.params.newCollectionId}).then(function(collection){
-    res.render("edit", {collection: collection})
+router.get("/:cardId/edit", function(req, res){
+  cards.findOne({_id: req.params.cardId}).then(function(allCards){
+    res.render("edit", {allCards: allCards})
   })
 });
 
@@ -59,15 +59,14 @@ router.post("/edit", function(req, res){
     _id: req.body.button
     },
 
-    { brand:req.body.brand,
-    color:req.body.color,
-      'details.0': {
-        type:req.body.type,
-        numberStrings:req.body.numOfStrings,
-        price:req.body.price}
-    }).then(function(newCollection){
+    { name: req.body.name,
+      skill: req.body.skill,
+      hp: req.body.hp,
+      'type.0': {elementDamage: req.body.elementDamage, weakness: req.body.weakness}
+    }).then(function(card){
     res.redirect("/");
   })
 });
+
 
 module.exports = router;
